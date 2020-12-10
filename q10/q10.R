@@ -8,5 +8,5 @@ prod(rle(sort(diff(x)))$lengths)
 
 # part b
 r <- rle(diff(x))
-olr <- rle(sort(r$lengths[r$values == 1]))
-prod(c(1, 2, 4, 7)[olr$values] ^ olr$lengths)
+prod(c(1,2,4,7)[r$lengths[r$values == 1]])
+
