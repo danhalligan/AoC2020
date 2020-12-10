@@ -11,7 +11,7 @@ graph = lines.to_h do |rule|
 end
 
 inverted = Hash.new {|h, k| h[k] = []}
-graph.each_pair do |bag, contents|
+graph.each do |bag, contents|
   contents.each { |c| inverted[c[:color]] << bag }
 end
 
