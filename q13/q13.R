@@ -14,11 +14,12 @@ buses <- as.numeric(as.numeric(strsplit(buses, ',')[[1]]))
 delays <- which(!is.na(buses))
 buses <- buses[!is.na(buses)]
 
-lcm <- function(buses, delays, increment) {
+# find lower common multiple starting from start and incrementing by increment
+lcm <- function(buses, delays, start, increment) {
   i <- 0
   found <- c()
   while (TRUE) {
-    n <- i*increment[2] + increment[1]
+    n <- i * increment + start
     if (all((n + delays) %% buses == 0)) found <- c(found, n)
     if (length(found) == 2) break
     i <- i + 1
@@ -30,9 +31,8 @@ lcm <- function(buses, delays, increment) {
 ## we don't want to test every number, so we find options that work for 2
 ## buses, then expand to 3 and so on. We only test numbers that are valid for
 ## previous buses at each step.
-increment <- c(1, 1)
+cur <- c(1, 2)
 for (m in 2:length(buses)) {
-  out <- lcm(buses[1:m], delays[1:m], increment)
-  increment <- c(out[1], diff(out))
+  cur <- lcm(buses[1:m], delays[1:m], cur[1], diff(cur))
 }
-out[1] + 1
+cur[1] + 1
