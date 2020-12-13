@@ -32,7 +32,7 @@ lcm <- function(buses, delays, increment) {
 ## previous buses at each step.
 increment <- c(1, 1)
 for (m in 2:length(buses)) {
-  out <- lcm(buses[1:m], delays[1:m], jump)
+  out <- lcm(buses[1:m], delays[1:m], increment)
   increment <- c(out[1], diff(out))
 }
 out[1] + 1
