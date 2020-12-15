@@ -1,6 +1,6 @@
 def iterate(start, n)
-  h = Hash.new{ |h,k| h[k] = [] }
-  start.each_with_index {|x, v| h[x] = [v + 1] }
+  h = Hash.new { |h,k| h[k] = [] }
+  start.each_with_index { |x, v| h[x] = [v + 1] }
   last = start[-1]
   ((start.length + 1)..n).each do |i|
     last = h[last].length <= 1 ? 0 : h[last][-1] - h[last][-2]
