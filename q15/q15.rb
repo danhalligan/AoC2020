@@ -9,6 +9,5 @@ def iterate(start, n)
   last
 end
 
-puts iterate([0, 3, 6], 12)
 puts iterate([2, 15, 0, 9, 1, 20], 2020)
 puts iterate([2, 15, 0, 9, 1, 20], 30000000)
