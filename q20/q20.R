@@ -76,6 +76,7 @@ rsolve <- function(grid, rotation) {
                         }
                     }
                 }
+                # we failed to place an image in the grid
                 return(NULL)
             }
         }
