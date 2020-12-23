@@ -1,54 +1,56 @@
 load './circularlist.rb'
 
-def move x
-  v = x.head.data
-  hold = x.remove_n 3
-  target = v - 1
-  while (!x.include? target)
-    target -= 1
-    target = x.max if target < x.min
+class CrabCups
+  attr_accessor :x
+
+  def initialize(input)
+    @x = CircularList.new
+    input.split('').each { |v| @x.insert(v.to_i) }
+    @max = @x.max
   end
-  x.insert_next x.find_first {|e| e.data == target}, hold
-  x.head = x.head.next
-end
 
-def parse(input)
-  x = CircularList.new
-  input.split('').each {|v| x.insert(v.to_i) }
-  x
-end
-
-def play(input, n = 10)
-  x = parse(input)
-  n.times do
-    move(x)
-    # puts x.inspect
+  def move
+    v = @x.head.data
+    hold = @x.remove_n 3
+    target = v
+    loop do
+      target -= 1
+      target = @max if target < 1
+      break unless hold.include? target
+    end
+    @x.insert_next @x.find_first {|e| e.data == target}, hold
+    @x.head = @x.head.next
   end
-  x.head = x.find_first {|e| e.data == 1}
-  x.to_a.drop(1).join('')
-end
 
-
-play('389125467')
-play('389125467', 100)
-play('685974213', 100)
-
-
-def playb(input, n = 10)
-  x = parse(input)
-  l = x.to_a.last
-  add = (1 + x.max + 1)..(1e6 - x.length + x.max)
-  x.insert_next x.find_first {|e| e.data == l}, add
-  i = 0
-  n.times do
-    i += 1
-    print '.'
-    move(x)
-    # puts x.inspect
+  def play(n = 10)
+    n.times do
+      move
+    end
+    @x.head = @x.find_first {|e| e.data == 1}
+    @x.to_a.drop(1).join('')
   end
-  x
+
+  def playb(n = 10000000)
+    l = @x.to_a.last
+    add = (@x.max + 1)..(1e6)
+    @x.insert_next @x.find_first {|e| e.data == l}, add
+    @max = 1e6
+    i = 0
+    n.times do
+      i += 1
+      print '.'
+      move
+    end
+    @x
+  end
+
 end
 
+
+CrabCups.new('389125467').play(100) # 67384529
+CrabCups.new('685974213').play(100) # 82635947
+
+r = CrabCups.new('685974213').playb(10000000)
 
 r = playb('685974213', 10000000)
 x.head = x.find_first {|e| e.data == 1}
