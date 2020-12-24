@@ -25,10 +25,11 @@ class CrabCups
     @c.next = hold[-1].next
 
     target = @c.data
+    values = hold.map{|v| v.data}
     loop do
       target -= 1
       target = @max if target < 1
-      break unless hold.map{|v| v.data}.include? target
+      break unless values.include? target
     end
     target = @map[target]
 
