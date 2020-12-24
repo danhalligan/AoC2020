@@ -21,7 +21,7 @@ def nblack(floor)
   floor.keys.count { |v| floor[v] }
 end
 
-puts nblack(floor)
+puts "part a: #{nblack(floor)}"
 
 def neighbours(p)
   even = p[1] % 2 == 0
@@ -35,24 +35,19 @@ def neighbours(p)
   ]
 end
 
-
+require 'set'
 100.times do
-  tiles = []
-  floor.keys.each {|k|
-    tiles += neighbours(k) + [k] if floor[k]
-  }
-  tiles = tiles.uniq
-  flip = Hash.new {|h,k| h[k] = false}
+  blacks = floor.select {|k, v| v}.keys
+  tiles = Set.new(blacks)
+  blacks.each { |k| tiles.merge(neighbours(k)) }
+  flip = {}
   tiles.each do |k|
     nsum = neighbours(k).count { |x| floor[x] }
-    if floor[k] && (nsum == 0 || nsum > 2)
-      flip[k] = true
-    elsif !floor[k] && nsum == 2
+    if (nsum == 2 && !floor[k]) || ((nsum == 0 || nsum > 2) && floor[k])
       flip[k] = true
     end
   end
   flip.keys.each {|k| floor[k] = !floor[k] }
-  print "."
 end
-puts
-puts nblack(floor)
+
+puts "part b: #{nblack(floor)}"
