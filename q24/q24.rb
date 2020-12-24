@@ -1,6 +1,6 @@
-dat = IO.readlines("test.txt", chomp: true).map { |l| l.scan /[sn]*[ew]/ }
+dat = IO.readlines("input.txt", chomp: true).map { |l| l.scan /[sn]*[ew]/ }
 
-floor = Hash.new {|h,k| h[k] = 0}
+floor = Hash.new { |h,k| h[k] = false }
 dat.each do |l|
   p = [0,0]
   l.each do |x|
@@ -14,18 +14,14 @@ dat.each do |l|
     when 'nw' then p = even ? [p[0],   p[1]-1] : [p[0]-1, p[1]-1]
     end
   end
-  floor[p] += 1
-end
-
-def black(v)
-  v % 2 != 0
+  floor[p] = !floor[p]
 end
 
 def nblack(floor)
-  floor.keys.count {|v| black(floor[v])}
+  floor.keys.count { |v| floor[v] }
 end
 
-nblack(floor)
+puts nblack(floor)
 
 def neighbours(p)
   even = p[1] % 2 == 0
@@ -39,20 +35,24 @@ def neighbours(p)
   ]
 end
 
-i = 0
-10.times do
-  i += 1
+
+100.times do
   tiles = []
-  floor.keys.each {|k| tiles += neighbours(k) + [k] }.sort.uniq
+  floor.keys.each {|k|
+    tiles += neighbours(k) + [k] if floor[k]
+  }
+  tiles = tiles.uniq
   flip = Hash.new {|h,k| h[k] = false}
   tiles.each do |k|
-    nsum = neighbours(k).count { |x| black(floor[x]) }
-    if black(floor[k]) && (nsum == 0 || nsum > 2)
+    nsum = neighbours(k).count { |x| floor[x] }
+    if floor[k] && (nsum == 0 || nsum > 2)
       flip[k] = true
-    elsif !black(floor[k]) && nsum == 2
+    elsif !floor[k] && nsum == 2
       flip[k] = true
     end
   end
-  flip.keys.each {|k| floor[k] = floor[k] % 2 == 0 ? 1 : 0 }
-  puts "#{i} #{nblack(floor)}"
+  flip.keys.each {|k| floor[k] = !floor[k] }
+  print "."
 end
+puts
+puts nblack(floor)
